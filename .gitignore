@@ -1,1 +1,2 @@
-./stock-tracker-backend/auth-service/node_modules
+node_modules
+.env
