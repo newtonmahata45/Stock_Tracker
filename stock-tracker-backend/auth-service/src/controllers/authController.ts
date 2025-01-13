@@ -13,6 +13,7 @@ export const register = async (req: Request, res: Response): Promise<Response> =
 
     return res.status(201).json({ status: true, message: 'User registered successfully', user });
   } catch (error: any) {
+    console.log(error);
     return res.status(500).json({ status: false, message: error.message });
   }
 };

@@ -28,7 +28,13 @@ export const registerUser = async (
     timezone,
     dateformat,
   });
-
+  if (!user) {
+    throw new Error('User registration failed');
+  }
+  user.firstname = firstname;
+  user.lastname = lastname;
+  user.email = email;
+  delete (user as any).password;
   return user;
 };
 
@@ -70,7 +76,7 @@ export const loginUser = async (email: string, password: string) => {
         email: decryptedEmail,
         timezone: user.timezone,
         dateformat: user.dateformat,
-        created_at: user.created_at,
+        createdAt: user.createdAt,
       },
     };
 };

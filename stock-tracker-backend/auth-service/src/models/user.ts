@@ -7,7 +7,7 @@ class User extends Model {
   public lastname!: string;
   public email!: string;
   public password!: string;
-  public created_at!: Date;
+  public createdAt!: Date;
   public timezone!: string;
   public dateformat!: string;
 }
@@ -36,10 +36,6 @@ User.init(
       type: DataTypes.STRING,
       allowNull: false,
     },
-    created_at: {
-      type: DataTypes.DATE,
-      defaultValue: DataTypes.NOW,
-    },
     timezone: {
       type: DataTypes.STRING,
       allowNull: false,
@@ -52,7 +48,7 @@ User.init(
   {
     sequelize,
     tableName: 'users',
-    timestamps: false,
+    timestamps: true,
   }
 );
 
