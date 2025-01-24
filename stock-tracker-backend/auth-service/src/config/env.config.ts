@@ -13,4 +13,5 @@ export default {
     JWT_SECRET: process.env.JWT_SECRET,
     JWT_EXPIRATION_TIME: process.env.JWT_EXPIRATION_TIME,
     SMTP_HOST: process.env.SMTP_HOST,
+    ENCRYPTION_KEY: process.env.ENCRYPTION_KEY
 }

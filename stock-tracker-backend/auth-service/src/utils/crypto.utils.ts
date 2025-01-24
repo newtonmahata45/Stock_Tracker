@@ -1,7 +1,9 @@
 import crypto from 'crypto';
+import envConfig from '../config/env.config';
+
 
 // Encryption Key and IV
-const ENCRYPTION_KEY = crypto.randomBytes(32); // 32 bytes for AES-256
+const ENCRYPTION_KEY =  String(envConfig.ENCRYPTION_KEY); // 32 bytes for AES-256
 const IV_LENGTH = 16; // AES block size
 
 export const encrypt = (text: string): string => {

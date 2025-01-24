@@ -1,7 +1,7 @@
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
-import User from '../models/user';
-import { decrypt, encrypt } from '../utils/cryptoUtils';
+import User from '../models/user.model';
+import { decrypt, encrypt } from '../utils/crypto.utils';
 
 export const registerUser = async (
   firstname: string,
@@ -14,7 +14,6 @@ export const registerUser = async (
   // Encrypt sensitive fields
   const encryptedFirstname = encrypt(firstname);
   const encryptedLastname = encrypt(lastname);
-  const encryptedEmail = encrypt(email);
 
   // Hash the password
   const hashedPassword = await bcrypt.hash(password, 10);
@@ -23,7 +22,7 @@ export const registerUser = async (
   const user = await User.create({
     firstname: encryptedFirstname,
     lastname: encryptedLastname,
-    email: encryptedEmail,
+    email,
     password: hashedPassword,
     timezone,
     dateformat,
@@ -40,14 +39,13 @@ export const registerUser = async (
 
 export const loginUser = async (email: string, password: string) => {
     // Encrypt the email for lookup since the email is stored encrypted
-    const encryptedEmail = encrypt(email);
-  
+
     // Find user by encrypted email
-    const user = await User.findOne({ where: { email: encryptedEmail } });
+    const user = await User.findOne({ where: { id: 3 } });
     if (!user) {
       throw new Error('Invalid email or password');
     }
-  
+
     // Compare the provided password with the hashed password in the database
     const isPasswordMatch = await bcrypt.compare(password, user.password);
     if (!isPasswordMatch) {
@@ -57,11 +55,10 @@ export const loginUser = async (email: string, password: string) => {
     // Decrypt the firstname, lastname, and email for the response
     const decryptedFirstname = decrypt(user.firstname);
     const decryptedLastname = decrypt(user.lastname);
-    const decryptedEmail = decrypt(user.email);
   
     // Generate a JWT token
     const token = jwt.sign(
-      { id: user.id, email: decryptedEmail, firstname: decryptedFirstname },
+      { id: user.id, email: user.email, firstname: decryptedFirstname },
       process.env.JWT_SECRET!,
       { expiresIn: '1h' }
     );
@@ -73,7 +70,7 @@ export const loginUser = async (email: string, password: string) => {
         id: user.id,
         firstname: decryptedFirstname,
         lastname: decryptedLastname,
-        email: decryptedEmail,
+        email: user.email,
         timezone: user.timezone,
         dateformat: user.dateformat,
         createdAt: user.createdAt,

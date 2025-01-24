@@ -1,7 +1,8 @@
 import express from 'express';
 import cors from 'cors';
-import authRoutes from './routes/authRoutes';
+import authRoutes from './routes/auth.route';
 import sequelize from './config/database';
+import userRoutes from './routes/user.route';
 
 const app = express();
 
@@ -18,6 +19,7 @@ app.use(express.json());
 
 // Routes
 app.use('/api/auth', authRoutes);
+app.use('/api/users', userRoutes);
 
 // Database connection
 sequelize.sync()

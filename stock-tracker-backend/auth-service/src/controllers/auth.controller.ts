@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
-import { loginUser, registerUser } from '../services/authService';
+import { loginUser, registerUser } from '../services/auth.service';
 
-export const register = async (req: Request, res: Response): Promise<Response> => {
+export const register = async (req: Request, res: Response): Promise<any> => {
   try {
     const { firstname, lastname, email, password, timezone, dateformat } = req.body;
 
@@ -18,13 +18,12 @@ export const register = async (req: Request, res: Response): Promise<Response> =
   }
 };
 
-export const login = async (req: Request, res: Response): Promise<Response> => {
+export const login = async (req: Request, res: Response): Promise<any> => {
   try {
     const { email, password } = req.body;
 
-    if (!email || !password) {
-      return res.status(400).json({ message: 'Email and password are required' });
-    }
+    if (!email || !password) return res.status(400).json({ status:false, message: 'Email and password are required' });
+    
 
     const { token, user } = await loginUser(email, password);
 
@@ -34,6 +33,6 @@ export const login = async (req: Request, res: Response): Promise<Response> => {
       user,
     });
   } catch (error: any) {
-    return res.status(401).json({ message: error.message });
+    return res.status(401).json({ status:false, message: error.message });
   }
 };
