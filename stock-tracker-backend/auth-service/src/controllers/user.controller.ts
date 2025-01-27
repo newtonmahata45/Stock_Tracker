@@ -1,9 +1,8 @@
 import { Request, Response } from 'express';
-import { getDecryptedUser } from '../services/user.service';
+import { getDecryptedUser, updateUserProfile } from '../services/user.service';
 
 
-
-export const getUserProfile = async (req: Request, res: Response) : Promise<any> => {
+const getUserProfile = async (req: Request, res: Response) : Promise<any> => {
   try {
     const userId = Number(req.query.user_id); // JWT payload contains user ID
 
@@ -18,3 +17,20 @@ export const getUserProfile = async (req: Request, res: Response) : Promise<any>
     return res.status(500).json({ status: false, message: error.message });
   }
 };
+
+const updateProfile = async (req: Request, res: Response): Promise<any> => {
+  try {
+    const userId = req.user.id; // Extracted from JWT middleware
+    const updates = req.body;
+
+    await updateUserProfile(userId, updates);
+    return res.status(200).json({ status: true, message: 'Profile updated successfully' });
+  } catch (error:any) {
+    return res.status(400).json({ status: false, message: error.message });
+  }
+};
+
+export {
+  getUserProfile,
+  updateProfile,
+}
