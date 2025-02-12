@@ -4,7 +4,7 @@ import envConfig from '../config/env.config';
 
 const authenticateJWT = async (req: Request, res: Response, next: NextFunction): Promise<any> =>{
   const token = req.header('Authorization')?.replace('Bearer ', '');
-
+  
   if (!token) {
     return res.status(401).json({ status: false, message: 'No token provided.' });
   }
